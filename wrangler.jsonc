@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ursignature",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://aozycfnvzeetpuqkuewj.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvenljZm52emVldHB1cWt1ZXdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDc2NjYsImV4cCI6MjA4OTA4MzY2Nn0.nNv8gK5kcmxIS98ucrYAjx7jswsVIk5fdxcDJ2kTBk8",
+    "R2_BUCKET_NAME": "ursignaturescent-media",
+    "NEXT_PUBLIC_R2_PUBLIC_URL": "https://media.ursignaturescent.com",
+    "TELEGRAM_CHAT_ID": "-1002671616450",
+    "SHIPROCKET_EMAIL": "kpbazaar1@gmail.com",
+    "NEXT_PUBLIC_APP_URL": "https://ursignaturescent.com",
+    "NEXT_PUBLIC_APP_NAME": "ursignaturescent",
+    "NEXT_PUBLIC_GA4_MEASUREMENT_ID": "G-XXXXXXXXXX",
+    "NEXT_PUBLIC_META_PIXEL_ID": ""
+  }
+}

@@ -1,0 +1,47 @@
+# Build Next.js with OpenNext on Linux and deploy to Cloudflare Workers via wrangler.
+# Fixes Windows-only esbuild alias errors when building locally.
+#
+# Setup:
+# 1. In GitHub repo: Settings → Secrets and variables → Actions → New repository secret
+#    Name: CLOUDFLARE_API_TOKEN
+#    Value: From Cloudflare Dashboard → My Profile → API Tokens → Create Token (Edit Cloudflare Workers template)
+# 2. Push to main (or trigger manually) to deploy.
+
+name: Deploy to Cloudflare
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for Cloudflare (OpenNext)
+        run: npx opennextjs-cloudflare build
+        env:
+          # Inline build-time env (NEXT_PUBLIC_*). Add more in GitHub repo Secrets if needed.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_R2_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_R2_PUBLIC_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          NEXT_PUBLIC_APP_NAME: ${{ secrets.NEXT_PUBLIC_APP_NAME }}
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: deploy
