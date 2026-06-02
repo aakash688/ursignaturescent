@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { ProductCard } from '@/components/storefront/ProductCard'
 import { HeroSection } from '@/components/storefront/HeroSection'
+import { QuickShopStrip } from '@/components/storefront/QuickShopStrip'
 import { BrandPromiseBar } from '@/components/storefront/BrandPromiseBar'
 import { ParallaxBanner } from '@/components/storefront/ParallaxBanner'
 import { FragranceFinderTeaser } from '@/components/storefront/FragranceFinderTeaser'
@@ -11,6 +12,9 @@ import { ReviewsCarousel } from '@/components/storefront/ReviewsCarousel'
 import { NewsletterSection } from '@/components/storefront/NewsletterSection'
 import { Button } from '@/components/ui/Button'
 import { mapProductImagesList } from '@/lib/product-images'
+import { getPublicSettings } from '@/lib/settings-public'
+import { mergeHeroSettings } from '@/lib/hero-settings'
+import { buildHeroSlides } from '@/lib/hero-slides'
 import type { Product, ProductVariant, Category } from '@/types'
 
 export default async function HomePage() {
@@ -21,6 +25,7 @@ export default async function HomePage() {
     { data: mensRaw },
     { data: womensRaw },
     { data: categories },
+    publicSettings,
   ] = await Promise.all([
     supabase
       .from('products')
@@ -45,7 +50,13 @@ export default async function HomePage() {
       .select('*')
       .eq('is_active', true)
       .order('sort_order'),
+    getPublicSettings(),
   ])
+
+  const heroSettings = mergeHeroSettings({
+    ...(publicSettings as Record<string, string>),
+    hero_slides: publicSettings.hero_slides ?? '',
+  })
 
   const featured = mapProductImagesList(featuredRaw ?? [])
   const mens = mapProductImagesList(mensRaw ?? [])
@@ -57,11 +68,13 @@ export default async function HomePage() {
       : featured[0].images[0].startsWith('/')
         ? featured[0].images[0]
         : `/images/products/${featured[0].slug}-1.png`
-    : '/images/products/midnight-wild-1.png'
+    : '/images/products/midnight-black-1.png'
+
+  const heroSlides = buildHeroSlides(heroSettings as Record<string, string>, featuredImage)
 
   const menImage = mens?.[0]?.images?.[0]
     ? mens[0].images[0].startsWith('/') ? mens[0].images[0] : `/images/products/${mens[0].slug}-1.png`
-    : '/images/products/midnight-wild-1.png'
+    : '/images/products/midnight-black-1.png'
 
   const womenImage = womens?.[0]?.images?.[0]
     ? womens[0].images[0].startsWith('/') ? womens[0].images[0] : `/images/products/${womens[0].slug}-1.png`
@@ -69,7 +82,9 @@ export default async function HomePage() {
 
   return (
     <div>
-      <HeroSection featuredImage={featuredImage} />
+      <HeroSection featuredImage={featuredImage} hero={heroSettings} slides={heroSlides} />
+
+      <QuickShopStrip />
 
       <BrandPromiseBar />
 

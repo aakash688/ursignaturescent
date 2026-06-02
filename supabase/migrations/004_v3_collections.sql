@@ -19,7 +19,7 @@ ON CONFLICT (slug) DO NOTHING;
 -- Assign products to inspired-by collections (separate INSERT per category to avoid duplicates)
 INSERT INTO product_categories (product_id, category_id)
 SELECT p.id, c.id FROM products p, categories c
-WHERE c.slug = 'inspired-by-dior' AND p.slug = 'midnight-wild'
+WHERE c.slug = 'inspired-by-dior' AND p.slug = 'midnight-black'
 ON CONFLICT (product_id, category_id) DO NOTHING;
 
 INSERT INTO product_categories (product_id, category_id)
@@ -70,7 +70,7 @@ ON CONFLICT (product_id, category_id) DO NOTHING;
 
 INSERT INTO product_categories (product_id, category_id)
 SELECT p.id, c.id FROM products p, categories c
-WHERE c.slug = 'office-wear' AND p.slug IN ('deep-blue','urban-edge','midnight-wild')
+WHERE c.slug = 'office-wear' AND p.slug IN ('deep-blue','urban-edge','midnight-black')
 ON CONFLICT (product_id, category_id) DO NOTHING;
 
 INSERT INTO product_categories (product_id, category_id)
@@ -80,10 +80,10 @@ ON CONFLICT (product_id, category_id) DO NOTHING;
 
 INSERT INTO product_categories (product_id, category_id)
 SELECT p.id, c.id FROM products p, categories c
-WHERE c.slug = 'all-day-wear' AND p.slug IN ('midnight-wild','kings-creed','royal-oud','deep-blue')
+WHERE c.slug = 'all-day-wear' AND p.slug IN ('midnight-black','kings-creed','royal-oud','deep-blue')
 ON CONFLICT (product_id, category_id) DO NOTHING;
 
 INSERT INTO product_categories (product_id, category_id)
 SELECT p.id, c.id FROM products p, categories c
-WHERE c.slug = 'best-sellers' AND p.slug IN ('midnight-wild','kings-creed','velvet-desire','royal-oud')
+WHERE c.slug = 'best-sellers' AND p.slug IN ('midnight-black','kings-creed','velvet-desire','royal-oud')
 ON CONFLICT (product_id, category_id) DO NOTHING;

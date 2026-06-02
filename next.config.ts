@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'media.ursignature.com' },
+      { protocol: 'https', hostname: 'media.ursignaturescent.com' },
+      { protocol: 'https', hostname: 'pub-9fde722bc607433db54c61c08a1389ba.r2.dev' },
       { protocol: 'https', hostname: '*.r2.dev' },
       { protocol: 'https', hostname: '*.cloudflarestorage.com' },
     ],

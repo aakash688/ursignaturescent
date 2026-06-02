@@ -1,7 +1,12 @@
 'use client'
 
-export function WhatsAppButton() {
-  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919999999999'
+function cleanWhatsApp(num: string | undefined): string {
+  if (!num || !String(num).trim()) return process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919999999999'
+  return String(num).replace(/\D/g, '').replace(/^0/, '') || '919999999999'
+}
+
+export function WhatsAppButton({ whatsappNumber }: { whatsappNumber?: string } = {}) {
+  const number = cleanWhatsApp(whatsappNumber)
   const message = encodeURIComponent(
     'Hi! I have a question about URsignature fragrances.'
   )

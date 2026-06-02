@@ -9,7 +9,7 @@ const reviews = [
   {
     name: 'Rahul M.',
     rating: 5,
-    text: 'Midnight Wild is incredible. Lasts all day and gets compliments every time. Best value for money.',
+    text: 'Midnight Black is incredible. Lasts all day and gets compliments every time. Best value for money.',
   },
   {
     name: 'Priya S.',

@@ -15,6 +15,7 @@ import {
   BarChart3,
   Settings,
   Mail,
+  Send,
   Star,
   LogOut,
 } from 'lucide-react'
@@ -33,6 +34,7 @@ const nav = [
   { href: '/admin/pos', label: 'POS', icon: CreditCard },
   { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
+  { href: '/admin/newsletter', label: 'Newsletter', icon: Send },
   { href: '/admin/contacts', label: 'Contacts', icon: Mail },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },
 ]

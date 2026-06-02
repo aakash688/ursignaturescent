@@ -1,217 +1,178 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
-import Image from 'next/image'
+import { useCallback, useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-
-interface Particle {
-  x: number
-  y: number
-  vx: number
-  vy: number
-  size: number
-  opacity: number
-  alpha: number
-  da: number
-}
-
-function ParticleCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')!
-    let W = (canvas.width = window.innerWidth)
-    let H = (canvas.height = window.innerHeight)
-
-    const particles: Particle[] = Array.from({ length: 180 }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      size: Math.random() * 2 + 0.5,
-      opacity: Math.random() * 0.25 + 0.05,
-      alpha: Math.random() * 0.25 + 0.05,
-      da: (Math.random() - 0.5) * 0.002,
-    }))
-
-    const raf = requestAnimationFrame(function loop() {
-      ctx.clearRect(0, 0, W, H)
-      for (const p of particles) {
-        p.x += p.vx
-        p.y += p.vy
-        p.alpha += p.da
-        if (p.alpha < 0.02 || p.alpha > 0.3) p.da *= -1
-        if (p.x < 0) p.x = W
-        if (p.x > W) p.x = 0
-        if (p.y < 0) p.y = H
-        if (p.y > H) p.y = 0
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(201,168,76,${p.alpha})`
-        ctx.fill()
-      }
-      requestAnimationFrame(loop)
-    })
-
-    const resize = () => {
-      W = canvas.width = window.innerWidth
-      H = canvas.height = window.innerHeight
-    }
-    window.addEventListener('resize', resize)
-    return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('resize', resize)
-    }
-  }, [])
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-    />
-  )
-}
+import { buildHeroSlides, resolveSlideCopy, type HeroSlide } from '@/lib/hero-slides'
+import { mergeHeroSettings } from '@/lib/hero-settings'
 
 interface HeroSectionProps {
   featuredImage?: string
+  hero?: Record<string, string>
+  slides?: HeroSlide[]
 }
 
-export function HeroSection({ featuredImage }: HeroSectionProps) {
+const AUTOPLAY_MS = 5000
+const DEFAULT_CTA = { label: 'Shop Collection', href: '/collections' }
+
+export function HeroSection({ featuredImage, hero: heroRaw, slides: slidesProp }: HeroSectionProps) {
+  const globals = mergeHeroSettings(heroRaw ?? {})
+  const slides = slidesProp?.length
+    ? slidesProp
+    : buildHeroSlides(globals as Record<string, string>, featuredImage)
+
+  const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const count = slides.length
+  const slide = count ? slides[index % count] : null
+  const copy = slide ? resolveSlideCopy(slide, globals as Record<string, string>) : null
+
+  const ctaLabel = copy?.ctaLabel || DEFAULT_CTA.label
+  const ctaUrl = copy?.ctaUrl || DEFAULT_CTA.href
+
+  const go = useCallback(
+    (dir: 1 | -1) => {
+      if (count <= 1) return
+      setIndex((i) => (i + dir + count) % count)
+    },
+    [count]
+  )
+
+  useEffect(() => {
+    if (count <= 1 || paused) return
+    const t = setInterval(() => setIndex((i) => (i + 1) % count), AUTOPLAY_MS)
+    return () => clearInterval(t)
+  }, [count, paused, index])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') go(-1)
+      if (e.key === 'ArrowRight') go(1)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [go])
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-noir">
-      <ParticleCanvas />
-
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_70%_50%,rgba(201,168,76,0.04)_0%,transparent_70%)]" />
-
-      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-16 grid lg:grid-cols-2 items-center gap-12 pt-24 pb-20">
-        <div className="space-y-8">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.4 }}
-          >
-            <p className="font-nav text-[10px] tracking-[0.5em] text-gold uppercase mb-6">
-              Premium Inspired Fragrances
-            </p>
-          </motion.div>
-
-          <div className="space-y-2 overflow-hidden">
-            {['Your Scent.', 'Your Identity.'].map((line, i) => (
-              <motion.h1
-                key={line}
-                className={`font-display leading-[0.9] ${
-                  i === 0
-                    ? 'text-ivory italic font-light'
-                    : 'text-gold-shimmer font-medium'
-                }`}
-                style={{ fontSize: 'clamp(52px, 9vw, 120px)' }}
-                initial={{ y: '100%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{
-                  delay: 0.4 + i * 0.15,
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {line}
-              </motion.h1>
-            ))}
-          </div>
-
-          <motion.p
-            className="font-body text-smoke-light text-lg leading-relaxed max-w-md"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            The world&apos;s finest fragrances, reimagined for you. Inspired by
-            luxury. Priced for real life.
-          </motion.p>
-
-          <motion.div
-            className="flex flex-wrap gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Link
-              href="/collections/men"
-              className="group relative h-12 px-8 border border-gold text-gold font-nav text-[11px] tracking-[0.3em] uppercase flex items-center justify-center overflow-hidden transition-colors duration-300 hover:text-noir"
+    <section
+      className="hero-billboard relative bg-noir overflow-hidden"
+      aria-roledescription="carousel"
+      aria-label="Featured campaigns"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
+      {/* Full-bleed background slides */}
+      <div className="hero-billboard-media">
+        <AnimatePresence mode="sync">
+          {copy?.imageSrc ? (
+            <motion.div
+              key={`${index}-${copy.imageSrc}`}
+              className="hero-billboard-slide"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
             >
-              <span className="absolute inset-0 bg-gold translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-              <span className="relative">Shop Men</span>
-            </Link>
-            <Link
-              href="/collections/women"
-              className="group relative h-12 px-8 border border-gold/40 text-ivory/80 font-nav text-[11px] tracking-[0.3em] uppercase flex items-center justify-center overflow-hidden transition-all duration-300 hover:border-gold hover:text-noir"
-            >
-              <span className="absolute inset-0 bg-gold translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-              <span className="relative">Shop Women</span>
-            </Link>
-            <Link
-              href="/fragrance-finder"
-              className="h-12 px-6 text-gold/70 font-nav text-[11px] tracking-[0.3em] uppercase flex items-center gap-2 hover:text-gold transition-colors group"
-            >
-              <span>Find My Scent</span>
-              <svg
-                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                />
-              </svg>
-            </Link>
-          </motion.div>
-        </div>
-
-        <motion.div
-          className="relative hidden lg:flex items-center justify-center"
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className="absolute w-64 h-64 rounded-full bg-gold/6 blur-[80px]" />
-          <div className="animate-float relative z-10">
-            {featuredImage && (
-              <Image
-                src={featuredImage}
-                alt="URsignature Fragrance"
-                width={380}
-                height={520}
-                className="object-contain drop-shadow-2xl"
-                style={{
-                  filter:
-                    'drop-shadow(0 40px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 40px rgba(201,168,76,0.08))',
-                }}
-                priority
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <motion.img
+                src={copy.imageSrc}
+                alt={copy.imageAlt}
+                className="hero-billboard-img"
+                fetchPriority={index === 0 ? 'high' : 'auto'}
+                decoding="async"
+                initial={{ scale: 1.08 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 7, ease: 'linear' }}
               />
-            )}
-          </div>
-          <div className="absolute w-[400px] h-[400px] rounded-full border border-gold/6" style={{ animation: 'spin 30s linear infinite' }} />
-          <div className="absolute w-[300px] h-[300px] rounded-full border border-gold/4" style={{ animation: 'spin 20s linear infinite reverse' }} />
-        </motion.div>
+            </motion.div>
+          ) : (
+            <div className="hero-billboard-slide flex items-center justify-center bg-noir-50 text-smoke text-sm">
+              Upload hero slides in Admin → Settings
+            </div>
+          )}
+        </AnimatePresence>
       </div>
 
+      {/* Readability scrim */}
+      <div className="hero-billboard-scrim pointer-events-none" aria-hidden />
+
+      {/* Text overlay — one message + one CTA per slide */}
+      <div className="hero-billboard-content">
+        {copy ? (
+          <>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`copy-${index}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="max-w-xl"
+              >
+                <p className="font-nav text-[10px] tracking-[0.5em] text-gold uppercase mb-5">
+                  {copy.eyebrow}
+                </p>
+                <div className="space-y-1">
+                  <h1
+                    className="font-display text-ivory italic font-light leading-[0.92]"
+                    style={{ fontSize: 'clamp(36px, 5vw, 76px)' }}
+                  >
+                    {copy.line1}
+                  </h1>
+                  <h1
+                    className="font-display text-gold-shimmer font-medium leading-[0.92]"
+                    style={{ fontSize: 'clamp(36px, 5vw, 76px)' }}
+                  >
+                    {copy.line2}
+                  </h1>
+                </div>
+                <p className="font-body text-smoke-light text-sm md:text-base leading-relaxed mt-5 max-w-md">
+                  {copy.subtitle}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.25 }}
+              className="mt-8"
+            >
+              <Link
+                href={ctaUrl}
+                className="group relative inline-flex h-12 px-10 border border-gold text-gold font-nav text-[11px] tracking-[0.25em] uppercase items-center justify-center overflow-hidden transition-colors duration-300 hover:text-noir"
+              >
+                <span className="absolute inset-0 bg-gold translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+                <span className="relative">{ctaLabel}</span>
+              </Link>
+            </motion.div>
+          </>
+        ) : (
+          <p className="text-smoke">Add hero slides in Admin → Settings</p>
+        )}
+      </div>
+
+      {count > 1 && (
+        <div className="hero-progress" aria-hidden>
+          <div
+            key={`progress-${index}`}
+            className={`hero-progress-bar${paused ? ' is-paused' : ''}`}
+            style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
+          />
+        </div>
+      )}
+
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
+        transition={{ delay: 1.2 }}
       >
-        <span className="font-nav text-[9px] tracking-[0.4em] text-smoke uppercase">
-          Scroll
-        </span>
+        <span className="font-nav text-[9px] tracking-[0.4em] text-smoke/80 uppercase">Scroll</span>
         <motion.div
-          className="w-px h-12 bg-gradient-to-b from-gold to-transparent"
+          className="w-px h-8 bg-gradient-to-b from-gold/60 to-transparent"
           animate={{ scaleY: [0, 1, 0], originY: 0 }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         />

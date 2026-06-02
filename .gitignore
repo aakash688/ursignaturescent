@@ -33,3 +33,9 @@ Thumbs.db
 
 # Misc
 *.tsbuildinfo
+
+# Wrangler local state
+.wrangler/
+
+# Source images (use R2 for production)
+Purfume images/

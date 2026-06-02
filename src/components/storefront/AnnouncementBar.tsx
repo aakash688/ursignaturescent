@@ -4,17 +4,22 @@ import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
-export function AnnouncementBar() {
-  const [text, setText] = useState('✨ Free shipping on orders above ₹999 | Premium Fragrances at Honest Prices')
+export function AnnouncementBar({ initialAnnouncement }: { initialAnnouncement?: string } = {}) {
+  const defaultText = '✨ Free shipping on orders above ₹999 | Premium Fragrances at Honest Prices'
+  const [text, setText] = useState(initialAnnouncement?.trim() || defaultText)
   const [dismissed, setDismissed] = useState(false)
 
   useEffect(() => {
+    if (initialAnnouncement?.trim()) {
+      setText(initialAnnouncement.trim())
+      return
+    }
     const supabase = createClient()
     void supabase.from('settings').select('value').eq('key', 'announcement_bar').single()
       .then(({ data }) => {
         if (data?.value) setText(data.value)
       })
-  }, [])
+  }, [initialAnnouncement])
 
   if (dismissed) return null
 

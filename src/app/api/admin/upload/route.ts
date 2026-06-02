@@ -32,15 +32,20 @@ export async function POST(request: NextRequest) {
       .slice(0, 40)
     // Product images go in products/{product-slug}/; use slug from form (set by admin from product name/slug)
     const key =
-      slugVal && slugVal !== 'misc'
-        ? `products/${slugVal}/${Date.now()}-${safeName}.${ext}`
-        : `misc/${Date.now()}-${safeName}.${ext}`
+      slugVal === 'hero'
+        ? `hero/${Date.now()}-${safeName}.${ext}`
+        : slugVal === 'logo' || slugVal === 'logo-horizontal'
+          ? `logo/${Date.now()}-${safeName}.${ext}`
+          : slugVal && slugVal !== 'misc'
+            ? `products/${slugVal}/${Date.now()}-${safeName}.${ext}`
+            : `misc/${Date.now()}-${safeName}.${ext}`
 
     const contentType = file.type || (ext === 'png' ? 'image/png' : ext === 'jpg' ? 'image/jpeg' : 'image/webp')
     const url = await uploadToR2(key, buffer, contentType)
     return NextResponse.json({ url })
   } catch (err) {
     console.error('Upload error:', err)
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
+    const message = err instanceof Error ? err.message : 'Upload failed'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

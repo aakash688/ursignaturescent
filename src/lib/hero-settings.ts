@@ -1,0 +1,29 @@
+export const HERO_DEFAULTS: Record<string, string> = {
+  hero_eyebrow: 'Premium Inspired Fragrances',
+  hero_title_line1: 'Your Scent.',
+  hero_title_line2: 'Your Identity.',
+  hero_subtitle:
+    "The world's finest fragrances, reimagined for you. Inspired by luxury. Priced for real life.",
+  hero_image_url: '',
+  hero_image_alt: 'URsignature Fragrance',
+  hero_cta_men_label: 'Shop Men',
+  hero_cta_men_url: '/collections/men',
+  hero_cta_women_label: 'Shop Women',
+  hero_cta_women_url: '/collections/women',
+  hero_cta_finder_label: 'Find My Scent',
+  hero_cta_finder_url: '/fragrance-finder',
+}
+
+export const HERO_KEYS = Object.keys(HERO_DEFAULTS) as (keyof typeof HERO_DEFAULTS)[]
+
+export const HERO_IMAGE_SPEC = {
+  width: 800,
+  height: 1100,
+  aspectRatio: '380:520',
+} as const
+
+export function mergeHeroSettings(api: Record<string, string>): Record<string, string> {
+  return { ...HERO_DEFAULTS, ...api }
+}
+
+export const HERO_PUBLIC_KEYS = [...HERO_KEYS] as const

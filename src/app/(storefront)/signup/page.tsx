@@ -43,7 +43,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <Logo size="md" variant="gold" href="/" className="inline-block mb-8" />
+        <Logo size="lg" variant="brand" href="/" className="inline-block mb-8" />
         <h1 className="font-display text-3xl text-ivory mb-2">Create account</h1>
         <p className="text-smoke mb-8">Join URsignature</p>
 

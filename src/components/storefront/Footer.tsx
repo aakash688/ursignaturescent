@@ -16,17 +16,40 @@ const footerLinks = {
   ],
 }
 
-export function Footer() {
+function cleanUrl(url: string | undefined, defaultPath: string): string {
+  if (!url || !url.trim()) return defaultPath
+  const u = url.trim()
+  if (u.startsWith('http')) return u
+  if (u.startsWith('instagram.com') || u.includes('instagram.com')) return `https://${u.replace(/^https?:\/\//, '')}`
+  return u.startsWith('/') ? `https://instagram.com${u}` : `https://instagram.com/${u.replace(/^@/, '')}`
+}
+
+function cleanWhatsApp(num: string | undefined): string {
+  if (!num || !num.trim()) return '919999999999'
+  return num.replace(/\D/g, '').replace(/^0/, '') || '919999999999'
+}
+
+export function Footer({
+  logoUrl,
+  instagramUrl,
+  whatsappNumber,
+}: {
+  logoUrl?: string | null
+  instagramUrl?: string
+  whatsappNumber?: string
+}) {
+  const instagram = cleanUrl(instagramUrl, 'https://instagram.com/ur_signature_')
+  const wa = cleanWhatsApp(whatsappNumber)
   return (
     <footer className="bg-[#050505] border-t border-white/5 mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <Logo size="sm" variant="dim" href="/" />
+            <Logo src={logoUrl} size="md" variant="brand" href="/" />
             <p className="mt-4 text-smoke text-sm">Your Scent. Your Identity.</p>
             <div className="mt-4 flex gap-4">
-              <a href="https://instagram.com/ur_signature_" target="_blank" rel="noopener noreferrer" className="text-smoke hover:text-gold transition-colors">Instagram</a>
-              <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" className="text-smoke hover:text-gold transition-colors">WhatsApp</a>
+              <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-smoke hover:text-gold transition-colors">Instagram</a>
+              <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className="text-smoke hover:text-gold transition-colors">WhatsApp</a>
             </div>
           </div>
           <div>

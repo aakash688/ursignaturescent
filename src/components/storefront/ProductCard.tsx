@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { useCartStore } from '@/stores/cart'
 import type { Product, ProductVariant } from '@/types'
 import { trackAddToCart } from '@/lib/analytics'
+import { resolveMediaUrl } from '@/lib/media-url'
 
 interface ProductCardProps {
   product: Product
@@ -17,7 +18,9 @@ interface ProductCardProps {
 
 export function ProductCard({ product, variant }: ProductCardProps) {
   const v = variant || product.variants?.[0]
-  const image = product.images?.[0] || '/images/products/placeholder.png'
+  const rawImage = product.images?.[0] || '/images/products/placeholder.png'
+  const image = resolveMediaUrl(rawImage) || rawImage
+  const src = image.startsWith('http') ? image : image.startsWith('/') ? image : `/${image}`
   const isOutOfStock = !v || v.stock_quantity <= 0
   const addItem = useCartStore((s) => s.addItem)
   const openCart = useCartStore((s) => s.openCart)
@@ -44,12 +47,12 @@ export function ProductCard({ product, variant }: ProductCardProps) {
     <div className="product-card group relative bg-charcoal border border-white/5 rounded-lg overflow-hidden">
       <Link href={`/product/${product.slug}`} className="block aspect-[4/5] relative overflow-hidden">
         <Image
-          src={image.startsWith('http') ? image : image.startsWith('/') ? image : `/${image}`}
+          src={src}
           alt={product.name}
           fill
           className="product-card-img object-cover"
           sizes="(max-width: 768px) 50vw, 25vw"
-          unoptimized={image.includes('placeholder')}
+          unoptimized={!src.startsWith('http')}
         />
         {isOutOfStock && (
           <div className="absolute inset-0 bg-noir/70 flex items-center justify-center">

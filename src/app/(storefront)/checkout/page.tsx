@@ -155,7 +155,7 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <Link href="/" className="inline-block mb-8">
-        <Logo size="sm" variant="gold" />
+        <Logo size="md" variant="brand" />
       </Link>
       <h1 className="font-display text-3xl text-ivory mb-8">Checkout</h1>
 

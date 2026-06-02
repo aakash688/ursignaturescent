@@ -17,7 +17,11 @@ const staticNavLinks = [
   { href: '/about', label: 'About' },
 ]
 
-export function Header() {
+interface HeaderProps {
+  logoUrl?: string | null
+}
+
+export function Header({ logoUrl }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [megaOpen, setMegaOpen] = useState(false)
@@ -50,8 +54,8 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 bg-noir/95 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-          <Logo href="/" size="md" variant="gold" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-[4.25rem] sm:h-[4.25rem]">
+          <Logo href="/" src={logoUrl} size="xl" variant="brand" />
 
           <nav className="hidden md:flex items-center gap-6">
             <div

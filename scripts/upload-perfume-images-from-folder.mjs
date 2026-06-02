@@ -56,7 +56,7 @@ const CORRECTIONS = {
   'Flirt Rush': { slug: 'flirt-rush', name: 'Flirt Rush' },
   'Game On': { slug: 'game-on', name: 'Game On' },
   'Kings Creed': { slug: 'kings-creed', name: "King's Creed" },
-  'Midnight Wild': { slug: 'midnight-wild', name: 'Midnight Wild' },
+  'Midnight Black': { slug: 'midnight-black', name: 'Midnight Black' },
   'Mystic Berry': { slug: 'mystic-berry', name: 'Mystic Berry' },
   'Royal Oud': { slug: 'royal-oud', name: 'Royal Oud' },
   'Urban Edge': { slug: 'urban-edge', name: 'Urban Edge' },
