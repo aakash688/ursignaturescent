@@ -1,0 +1,8 @@
+# Dependencies and build
+node_modules/
+dist/
+
+# Env and secrets (do not commit)
+.env
+.env.local
+.env.*.local

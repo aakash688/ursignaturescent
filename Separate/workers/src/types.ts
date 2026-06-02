@@ -1,0 +1,17 @@
+export interface Env {
+  SUPABASE_URL: string
+  SUPABASE_SERVICE_ROLE_KEY: string
+  NEXT_PUBLIC_SUPABASE_URL: string
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: string
+  R2_BUCKET: R2Bucket
+  R2_BUCKET_NAME: string
+  NEXT_PUBLIC_R2_PUBLIC_URL: string
+  TELEGRAM_CHAT_ID?: string
+  TELEGRAM_BOT_TOKEN?: string
+  RAZORPAY_KEY_ID?: string
+  RAZORPAY_KEY_SECRET?: string
+  SHIPROCKET_EMAIL?: string
+  SHIPROCKET_PASSWORD?: string
+  NEXT_PUBLIC_APP_URL: string
+  NEXT_PUBLIC_APP_NAME: string
+}

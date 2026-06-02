@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "ursignature-separate-pipeline",
+  "version": "1.0.0",
+  "description": "Agent pipeline: Analyze monolith → Create Workers + Pages → Test → Verify → Deploy",
+  "artifactsRoot": "Separate/AGENTS/artifacts",
+  "stages": [
+    {
+      "id": "analyze",
+      "agent": "01-AGENT-ANALYZER.md",
+      "inputs": { "monolithRoot": "../src", "configRoot": ".." },
+      "outputs": {
+        "apiSpec": "artifacts/api-spec.json",
+        "uiSpec": "artifacts/ui-spec.json",
+        "envSchema": "artifacts/env-schema.json",
+        "contracts": "artifacts/contracts.json"
+      }
+    },
+    {
+      "id": "create-workers",
+      "agent": "02-AGENT-WORKERS-CREATOR.md",
+      "inputs": {
+        "apiSpec": "artifacts/api-spec.json",
+        "contracts": "artifacts/contracts.json",
+        "envSchema": "artifacts/env-schema.json"
+      },
+      "outputs": { "workersRoot": "../workers" }
+    },
+    {
+      "id": "create-pages",
+      "agent": "03-AGENT-PAGES-CREATOR.md",
+      "inputs": {
+        "uiSpec": "artifacts/ui-spec.json",
+        "contracts": "artifacts/contracts.json",
+        "apiBaseUrlPlaceholder": "{{WORKERS_API_URL}}"
+      },
+      "outputs": { "pagesRoot": "../pages" }
+    },
+    {
+      "id": "test",
+      "agent": "04-AGENT-TESTER.md",
+      "inputs": {
+        "workersRoot": "../workers",
+        "pagesRoot": "../pages",
+        "contracts": "artifacts/contracts.json"
+      },
+      "outputs": { "testReport": "artifacts/test-report.json" }
+    },
+    {
+      "id": "verify",
+      "agent": "05-AGENT-VERIFIER.md",
+      "inputs": {
+        "workersRoot": "../workers",
+        "pagesRoot": "../pages",
+        "contracts": "artifacts/contracts.json",
+        "testReport": "artifacts/test-report.json"
+      },
+      "outputs": { "verificationReport": "artifacts/verification-report.json" }
+    },
+    {
+      "id": "deploy",
+      "agent": "06-AGENT-DEPLOYER.md",
+      "inputs": {
+        "workersRoot": "../workers",
+        "pagesRoot": "../pages",
+        "verificationReport": "artifacts/verification-report.json"
+      },
+      "outputs": {
+        "workersUrl": "env:WORKERS_URL",
+        "pagesUrl": "env:PAGES_URL"
+      }
+    }
+  ]
+}

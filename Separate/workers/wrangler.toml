@@ -1,0 +1,22 @@
+# URsignature API — Cloudflare Worker
+# Secrets (SUPABASE_SERVICE_ROLE_KEY, RAZORPAY_KEY_SECRET, etc.) must be set via: wrangler secret put <NAME>
+name = "ursignature-api"
+main = "src/index.ts"
+compatibility_date = "2025-03-15"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Copy from your .env (non-secret only). Set SUPABASE_SERVICE_ROLE_KEY via: wrangler secret put SUPABASE_SERVICE_ROLE_KEY --config wrangler.toml
+SUPABASE_URL = "https://aozycfnvzeetpuqkuewj.supabase.co"
+NEXT_PUBLIC_SUPABASE_URL = "https://aozycfnvzeetpuqkuewj.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvenljZm52emVldHB1cWt1ZXdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDc2NjYsImV4cCI6MjA4OTA4MzY2Nn0.nNv8gK5kcmxIS98ucrYAjx7jswsVIk5fdxcDJ2kTBk8"
+R2_BUCKET_NAME = "ursignaturescent-media"
+NEXT_PUBLIC_R2_PUBLIC_URL = "https://media.ursignaturescent.com"
+TELEGRAM_CHAT_ID = "-1002671616450"
+NEXT_PUBLIC_APP_URL = "https://ursignaturescent.com"
+NEXT_PUBLIC_APP_NAME = "ursignaturescent"
+
+# R2 bucket binding (create bucket in dashboard if needed)
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "ursignaturescent-media"

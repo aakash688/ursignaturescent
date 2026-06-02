@@ -39,3 +39,7 @@ Thumbs.db
 
 # Source images (use R2 for production)
 Purfume images/
+
+# Windows reserved device name (accidental redirect artifact)
+NUL
+nul

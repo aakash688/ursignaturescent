@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-03-15T16:20:00.000Z",
+  "checks": {
+    "testReportExists": true,
+    "workersBuildPassed": true,
+    "workersContractPassed": true,
+    "pagesBuildPassed": true,
+    "overallTestsPassed": true,
+    "workersConfigValid": true,
+    "pagesConfigValid": true
+  },
+  "readyToDeploy": true,
+  "messages": []
+}

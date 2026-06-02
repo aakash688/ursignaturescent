@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "ursignature-api" generated at 2026-03-15T16:18:54.188Z.
