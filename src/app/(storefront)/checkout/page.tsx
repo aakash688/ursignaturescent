@@ -38,12 +38,14 @@ export default function CheckoutPage() {
   const [appliedDiscount, setAppliedDiscount] = useState(0)
   const [loading, setLoading] = useState(false)
   const [couponError, setCouponError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   const subtotal = getSubtotal()
   const shipping = subtotal - appliedDiscount >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_SHIPPING
   const total = subtotal - appliedDiscount + shipping
 
   useEffect(() => {
+    setMounted(true)
     closeCart()
   }, [closeCart])
 
@@ -143,11 +145,20 @@ export default function CheckoutPage() {
     }
   }
 
-  if (!items.length && typeof window !== 'undefined') {
+  if (mounted && !items.length) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
         <h1 className="font-display text-2xl text-ivory mb-4">Your cart is empty</h1>
         <Link href="/products"><Button>Continue shopping</Button></Link>
+      </div>
+    )
+  }
+
+  if (!mounted) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <h1 className="font-display text-3xl text-ivory mb-8">Checkout</h1>
+        <p className="text-smoke text-sm">Loading checkout...</p>
       </div>
     )
   }
@@ -159,8 +170,8 @@ export default function CheckoutPage() {
       </Link>
       <h1 className="font-display text-3xl text-ivory mb-8">Checkout</h1>
 
-      <div className="grid md:grid-cols-2 gap-12">
-        <div>
+      <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+        <div className="order-2 md:order-1">
           <h2 className="font-display text-xl text-ivory mb-4">Shipping address</h2>
           <div className="space-y-4">
             <Input label="Name" required value={address.name} onChange={(e) => setAddress((a) => ({ ...a, name: e.target.value }))} />
@@ -174,22 +185,22 @@ export default function CheckoutPage() {
 
           <div className="mt-8">
             <h2 className="font-display text-xl text-ivory mb-4">Coupon</h2>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={couponCode}
                 onChange={(e) => { setCouponCode(e.target.value); setCouponError(null) }}
                 placeholder="Code"
-                className="flex-1 bg-noir-elevated border border-white/10 rounded px-4 py-2 text-ivory"
+                className="flex-1 bg-noir-elevated border border-white/10 rounded px-4 py-2.5 min-h-[44px] text-ivory"
               />
-              <Button type="button" variant="outline" onClick={handleApplyCoupon}>Apply</Button>
+              <Button type="button" variant="outline" onClick={handleApplyCoupon} className="min-h-[44px]">Apply</Button>
             </div>
             {couponError && <p className="text-red-400 text-sm mt-1">{couponError}</p>}
             {appliedDiscount > 0 && <p className="text-gold text-sm mt-1">₹{appliedDiscount} discount applied</p>}
           </div>
         </div>
 
-        <div>
+        <div className="order-1 md:order-2">
           <h2 className="font-display text-xl text-ivory mb-4">Order summary</h2>
           <div className="space-y-3 mb-6">
             {items.map((i) => (
@@ -225,7 +236,7 @@ export default function CheckoutPage() {
               <span>{formatPrice(total)}</span>
             </div>
           </div>
-          <Button className="w-full mt-8" size="lg" onClick={handlePlaceOrder} loading={loading} disabled={loading}>
+          <Button className="w-full mt-8 min-h-[48px]" size="lg" onClick={handlePlaceOrder} loading={loading} disabled={loading}>
             {loading ? 'Processing...' : `Pay ${formatPrice(total)}`}
           </Button>
           <p className="text-smoke text-xs mt-4 text-center">Prepaid only. You will be redirected to Razorpay.</p>

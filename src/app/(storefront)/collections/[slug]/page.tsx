@@ -38,10 +38,10 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16">
-      <h1 className="font-display text-4xl text-ivory mb-4">{category.name}</h1>
-      {category.description && <p className="text-smoke mb-12">{category.description}</p>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16">
+      <h1 className="font-display text-3xl sm:text-4xl text-ivory mb-4">{category.name}</h1>
+      {category.description && <p className="text-smoke mb-8 sm:mb-12 text-sm sm:text-base">{category.description}</p>}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
         {products.map((p) => (
           <ProductCard key={p.id} product={p} variant={p.product_variants?.[0]} />
         ))}

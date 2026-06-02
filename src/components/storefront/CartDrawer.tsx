@@ -90,7 +90,7 @@ export function CartDrawer() {
               <span className="text-gold font-medium">{formatPrice(subtotal)}</span>
             </div>
             <Link href="/checkout" onClick={closeCart}>
-              <Button fullWidth size="lg">Proceed to Checkout</Button>
+              <Button fullWidth size="lg" className="min-h-[48px]">Proceed to Checkout</Button>
             </Link>
           </div>
         )}

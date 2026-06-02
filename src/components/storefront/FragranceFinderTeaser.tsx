@@ -12,7 +12,7 @@ export function FragranceFinderTeaser() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
-      className="py-24 px-4 bg-noir-elevated/50"
+      className="py-12 sm:py-24 px-4 bg-noir-elevated/50"
     >
       <div className="max-w-3xl mx-auto text-center">
         <motion.div variants={fadeUp} className="inline-flex items-center gap-2 text-gold mb-6">

@@ -19,27 +19,29 @@ export function ProductsFilters({ currentGender, currentSort }: ProductsFiltersP
   }
 
   return (
-    <div className="flex flex-wrap gap-4 items-center">
-      <div className="flex gap-2">
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
         <span className="text-smoke text-sm">Gender:</span>
-        {['men', 'women', 'unisex'].map((g) => (
-          <button
-            key={g}
-            onClick={() => setFilter('gender', currentGender === g ? '' : g)}
-            className={`px-3 py-1 rounded text-sm capitalize ${
-              currentGender === g ? 'bg-gold text-noir' : 'bg-noir-elevated text-ivory hover:border-gold/50 border border-white/10'
-            }`}
-          >
-            {g}
-          </button>
-        ))}
+        <div className="flex flex-wrap gap-2">
+          {['men', 'women', 'unisex'].map((g) => (
+            <button
+              key={g}
+              onClick={() => setFilter('gender', currentGender === g ? '' : g)}
+              className={`px-3 py-2 min-h-[44px] rounded text-sm capitalize ${
+                currentGender === g ? 'bg-gold text-noir' : 'bg-noir-elevated text-ivory hover:border-gold/50 border border-white/10'
+              }`}
+            >
+              {g}
+            </button>
+          ))}
+        </div>
       </div>
-      <div className="flex gap-2 items-center">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2 w-full sm:w-auto">
         <span className="text-smoke text-sm">Sort:</span>
         <select
           value={currentSort ?? ''}
           onChange={(e) => setFilter('sort', e.target.value)}
-          className="bg-noir-elevated border border-white/10 rounded px-3 py-2 text-ivory text-sm"
+          className="w-full sm:w-auto bg-noir-elevated border border-white/10 rounded px-3 py-2.5 min-h-[44px] text-ivory text-sm"
         >
           <option value="">Featured</option>
           <option value="price-asc">Price: Low to High</option>

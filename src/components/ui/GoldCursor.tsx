@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { ClientOnly } from '@/components/shared/ClientOnly'
 
-export function GoldCursor() {
+function GoldCursorInner() {
   const dot = useRef<HTMLDivElement>(null)
   const ring = useRef<HTMLDivElement>(null)
 
@@ -18,6 +19,7 @@ export function GoldCursor() {
     }
     window.addEventListener('mousemove', move)
 
+    let frameId = 0
     const animate = () => {
       ringX += (x - ringX) * 0.12
       ringY += (y - ringY) * 0.12
@@ -27,20 +29,22 @@ export function GoldCursor() {
       if (ring.current) {
         ring.current.style.transform = `translate(${ringX}px, ${ringY}px)`
       }
-      requestAnimationFrame(animate)
+      frameId = requestAnimationFrame(animate)
     }
-    animate()
+    frameId = requestAnimationFrame(animate)
 
     const grow = () => ring.current?.classList.add('expanded')
     const shrink = () => ring.current?.classList.remove('expanded')
-    document.querySelectorAll('a, button, [role="button"]').forEach((el) => {
+    const interactive = document.querySelectorAll('a, button, [role="button"]')
+    interactive.forEach((el) => {
       el.addEventListener('mouseenter', grow)
       el.addEventListener('mouseleave', shrink)
     })
 
     return () => {
+      cancelAnimationFrame(frameId)
       window.removeEventListener('mousemove', move)
-      document.querySelectorAll('a, button, [role="button"]').forEach((el) => {
+      interactive.forEach((el) => {
         el.removeEventListener('mouseenter', grow)
         el.removeEventListener('mouseleave', shrink)
       })
@@ -58,5 +62,13 @@ export function GoldCursor() {
         className="cursor-ring fixed top-0 left-0 w-8 h-8 border border-gold/40 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 [&.expanded]:w-14 [&.expanded]:h-14 [&.expanded]:border-gold/70"
       />
     </>
+  )
+}
+
+export function GoldCursor() {
+  return (
+    <ClientOnly>
+      <GoldCursorInner />
+    </ClientOnly>
   )
 }

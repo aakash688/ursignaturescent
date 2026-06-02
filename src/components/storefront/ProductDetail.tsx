@@ -30,6 +30,15 @@ export function ProductDetail({ product }: ProductDetailProps) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    if (stickyVisible) {
+      document.body.classList.add('has-sticky-product-bar')
+    } else {
+      document.body.classList.remove('has-sticky-product-bar')
+    }
+    return () => document.body.classList.remove('has-sticky-product-bar')
+  }, [stickyVisible])
+
   const handleAddToCart = () => {
     if (!selectedVariant || selectedVariant.stock_quantity <= 0) return
     addItem({
@@ -60,8 +69,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className={`max-w-7xl mx-auto px-4 py-12 sm:py-16 ${stickyVisible ? 'pb-28 sm:pb-16' : ''}`}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
           <div>
             <div className="aspect-[4/5] relative rounded-lg overflow-hidden bg-charcoal mb-4">
               <Image
@@ -74,7 +83,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
               />
             </div>
             {images.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto">
+              <div className="flex gap-2 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
                 {images.map((img, i) => (
                   <button
                     key={i}
@@ -101,7 +110,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             {product.inspired_by && (
               <p className="text-gold text-sm mb-2">Inspired by {product.inspired_by}</p>
             )}
-            <h1 className="font-display text-4xl text-ivory">{product.name}</h1>
+            <h1 className="font-display text-3xl sm:text-4xl text-ivory">{product.name}</h1>
             <div className="flex items-center gap-4 mt-4">
               <StarRating rating={product.rating} />
             </div>
@@ -187,19 +196,23 @@ export function ProductDetail({ product }: ProductDetailProps) {
       </div>
 
       {stickyVisible && selectedVariant && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-noir/98 backdrop-blur border-t border-white/5 py-4 px-4 lg:px-8">
-          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-            <div>
-              <p className="font-display text-lg text-ivory">{product.name}</p>
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-noir/98 backdrop-blur border-t border-white/5 py-3 px-4 lg:px-8 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <div className="min-w-0 sm:hidden">
+              <p className="font-display text-base text-ivory truncate">{product.name}</p>
+              <p className="text-gold font-medium text-sm">{formatPrice(selectedVariant.price)} · {selectedVariant.size_ml}ml</p>
+            </div>
+            <div className="hidden sm:block min-w-0">
+              <p className="font-display text-lg text-ivory truncate">{product.name}</p>
               <p className="text-gold font-medium">{formatPrice(selectedVariant.price)} · {selectedVariant.size_ml}ml</p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center border border-white/10 rounded">
-                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="px-3 py-2 text-ivory hover:bg-white/5">−</button>
+            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+              <div className="flex items-center border border-white/10 rounded shrink-0">
+                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="px-3 py-2 min-w-[44px] min-h-[44px] text-ivory hover:bg-white/5">−</button>
                 <span className="px-3 py-2 min-w-[2.5rem] text-center text-sm">{quantity}</span>
-                <button onClick={() => setQuantity((q) => q + 1)} className="px-3 py-2 text-ivory hover:bg-white/5">+</button>
+                <button onClick={() => setQuantity((q) => q + 1)} className="px-3 py-2 min-w-[44px] min-h-[44px] text-ivory hover:bg-white/5">+</button>
               </div>
-              <Button onClick={handleAddToCart} disabled={selectedVariant.stock_quantity <= 0} size="lg">
+              <Button onClick={handleAddToCart} disabled={selectedVariant.stock_quantity <= 0} size="lg" className="flex-1 sm:flex-none min-h-[48px]">
                 Add to Cart
               </Button>
             </div>

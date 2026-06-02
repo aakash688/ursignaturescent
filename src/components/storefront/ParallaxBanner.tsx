@@ -24,7 +24,7 @@ export function ParallaxBanner({ title, subtitle, href, cta, image, alt }: Paral
   const opacity = useTransform(scrollYProgress, [0, 0.3], [0.6, 1])
 
   return (
-    <section ref={ref} className="relative h-[420px] overflow-hidden">
+    <section ref={ref} className="relative h-[280px] sm:h-[360px] lg:h-[420px] overflow-hidden">
       <motion.div style={{ y }} className="absolute inset-0">
         <Image
           src={image}
@@ -41,7 +41,7 @@ export function ParallaxBanner({ title, subtitle, href, cta, image, alt }: Paral
         style={{ opacity }}
         className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6"
       >
-        <h2 className="font-display text-4xl md:text-5xl text-ivory mb-2">{title}</h2>
+        <h2 className="font-display text-3xl md:text-5xl text-ivory mb-2">{title}</h2>
         <p className="text-smoke-light mb-8 max-w-md">{subtitle}</p>
         <Link
           href={href}

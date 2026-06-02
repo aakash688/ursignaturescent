@@ -28,13 +28,13 @@ export function NotesEducation() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
-      className="py-24 px-4 border-y border-white/5"
+      className="py-12 sm:py-24 px-4 border-y border-white/5"
     >
       <div className="max-w-4xl mx-auto">
-        <motion.h2 variants={fadeUp} className="font-display text-4xl text-ivory mb-4 text-center">
+        <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl text-ivory mb-4 text-center">
           Understanding Fragrance Notes
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-smoke text-center mb-12 max-w-xl mx-auto">
+        <motion.p variants={fadeUp} className="text-smoke text-center mb-8 sm:mb-12 max-w-xl mx-auto text-sm sm:text-base">
           Every fragrance has three layers that unfold over time. Here&apos;s how they work.
         </motion.p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

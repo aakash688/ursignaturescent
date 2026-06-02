@@ -18,23 +18,23 @@ export function CollectionsGrid({ categories }: CollectionsGridProps) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
-      className="py-24 px-4"
+      className="py-12 sm:py-24 px-4"
     >
       <div className="max-w-7xl mx-auto">
-        <motion.h2 variants={fadeUp} className="font-display text-4xl text-ivory mb-4">
+        <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl text-ivory mb-4">
           Explore Collections
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-smoke mb-12 max-w-xl">
+        <motion.p variants={fadeUp} className="text-smoke mb-8 sm:mb-12 max-w-xl text-sm sm:text-base">
           From inspired-by-luxury to lifestyle essentials — find your perfect scent.
         </motion.p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {display.map((cat, i) => (
             <motion.div key={cat.id} variants={fadeUp}>
               <Link
                 href={`/collections/${cat.slug}`}
-                className="block p-6 rounded-lg border border-white/5 hover:border-gold/30 bg-noir-card hover:bg-noir-elevated transition-all group"
+                className="block p-4 sm:p-6 rounded-lg border border-white/5 hover:border-gold/30 bg-noir-card hover:bg-noir-elevated transition-all group"
               >
-                <h3 className="font-display text-lg text-ivory group-hover:text-gold transition-colors">
+                <h3 className="font-display text-base sm:text-lg text-ivory group-hover:text-gold transition-colors">
                   {cat.name}
                 </h3>
                 {cat.description && (

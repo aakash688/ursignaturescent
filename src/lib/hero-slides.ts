@@ -17,8 +17,10 @@ export const HERO_SLIDE_SPEC = {
   safeZoneLeft: '42% width — keep darker/less busy for text overlay',
   safeZoneTop: 'Top 15% — keep subtle for gradient scrim blend',
   notes:
-    'Full-width campaign billboard (1920×800). Visual only — no headlines, bullets, or CTAs in the image. Copy is overlaid from admin.',
+    'Full-width campaign billboard (1920×800). Visual only — no headlines, bullets, or CTAs in the image. Copy is overlaid from admin on desktop. Mobile uses stacked layout — keep bottle in upper-right 40% of image; left 50% can be atmosphere only.',
 } as const
+
+export type HeroFocalPoint = 'left' | 'center' | 'right'
 
 export type HeroSlide = {
   image_url: string
@@ -29,6 +31,7 @@ export type HeroSlide = {
   subtitle?: string
   cta_label?: string
   cta_url?: string
+  focal_point?: HeroFocalPoint
 }
 
 export function emptyHeroSlide(): HeroSlide {
@@ -51,6 +54,10 @@ export function parseHeroSlides(raw: string | undefined | null): HeroSlide[] {
         subtitle: s.subtitle != null ? String(s.subtitle) : undefined,
         cta_label: s.cta_label != null ? String(s.cta_label) : undefined,
         cta_url: s.cta_url != null ? String(s.cta_url) : undefined,
+        focal_point:
+          s.focal_point === 'left' || s.focal_point === 'center' || s.focal_point === 'right'
+            ? (s.focal_point as HeroFocalPoint)
+            : undefined,
       }))
       .filter((s) => s.image_url.trim())
   } catch {
@@ -114,4 +121,17 @@ export function buildHeroSlides(
       subtitle: settings.hero_subtitle,
     },
   ]
+}
+
+/** CSS class for hero image focal crop (brand vs product slides). */
+export function resolveSlideFocalClass(slide: HeroSlide, slideIndex = 0): string {
+  if (slide.focal_point === 'left') return 'hero-billboard-img--brand'
+  if (slide.focal_point === 'right') return 'hero-billboard-img--product'
+  if (slide.focal_point === 'center') return 'hero-billboard-img--brand'
+
+  const url = slide.image_url.toLowerCase()
+  if (url.includes('all-fragrances') || url.includes('all-combined') || slideIndex === 0) {
+    return 'hero-billboard-img--brand'
+  }
+  return 'hero-billboard-img--product'
 }

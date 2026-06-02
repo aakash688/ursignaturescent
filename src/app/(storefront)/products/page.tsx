@@ -54,10 +54,10 @@ export default async function ProductsPage({
       const ids = pids?.map((p) => p.product_id) ?? []
       const filtered = products.filter((p) => ids.includes(p.id))
       return (
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <h1 className="font-display text-4xl text-ivory mb-4">All Fragrances</h1>
+        <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16">
+          <h1 className="font-display text-3xl sm:text-4xl text-ivory mb-4">All Fragrances</h1>
           <ProductsFilters currentGender={params.gender} currentSort={params.sort} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 mt-6 sm:mt-8">
             {filtered.map((p) => (
               <ProductCard key={p.id} product={p} variant={p.product_variants?.[0]} />
             ))}
@@ -69,10 +69,10 @@ export default async function ProductsPage({
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16">
-      <h1 className="font-display text-4xl text-ivory mb-4">All Fragrances</h1>
+    <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16">
+      <h1 className="font-display text-3xl sm:text-4xl text-ivory mb-4">All Fragrances</h1>
       <ProductsFilters currentGender={params.gender} currentSort={params.sort} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 mt-6 sm:mt-8">
         {products.map((p) => (
           <ProductCard key={p.id} product={p} variant={p.product_variants?.[0]} />
         ))}

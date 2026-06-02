@@ -29,9 +29,9 @@ export function BrandPromiseBar() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
-      className="py-12 border-y border-white/5"
+      className="py-8 sm:py-12 border-y border-white/5"
     >
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
         {promises.map(({ icon: Icon, title, desc }) => (
           <motion.div key={title} variants={fadeUp} className="group">
             <div className="inline-flex p-3 rounded-full border border-gold/20 text-gold mb-4 group-hover:border-gold/50 transition-colors">

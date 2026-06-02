@@ -51,7 +51,7 @@ export function ProductCard({ product, variant }: ProductCardProps) {
           alt={product.name}
           fill
           className="product-card-img object-cover"
-          sizes="(max-width: 768px) 50vw, 25vw"
+          sizes="(max-width: 640px) 50vw, 25vw"
           unoptimized={!src.startsWith('http')}
         />
         {isOutOfStock && (
@@ -59,29 +59,29 @@ export function ProductCard({ product, variant }: ProductCardProps) {
             <span className="text-ivory font-medium">Out of Stock</span>
           </div>
         )}
-        <div className="product-card-overlay absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-noir to-transparent" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-          <Button size="sm" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAddToCart(); }} disabled={isOutOfStock} fullWidth type="button">
+        <div className="product-card-overlay absolute bottom-0 left-0 right-0 p-2 sm:p-4 bg-gradient-to-t from-noir to-transparent" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+          <Button size="sm" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAddToCart(); }} disabled={isOutOfStock} fullWidth type="button" className="text-xs sm:text-sm">
             Add to Cart
           </Button>
         </div>
       </Link>
-      <div className="p-4">
-        {product.is_featured && <Badge variant="gold" className="mb-2">Featured</Badge>}
-        <h3 className="font-display text-lg text-ivory">{product.name}</h3>
-        <p className="text-smoke text-sm mt-0.5">{product.tagline}</p>
-        <div className="flex items-center justify-between mt-2">
-          <div className="flex items-center gap-2">
+      <div className="p-3 sm:p-4">
+        {product.is_featured && <Badge variant="gold" className="mb-1 sm:mb-2 text-[10px] sm:text-xs">Featured</Badge>}
+        <h3 className="font-display text-sm sm:text-lg text-ivory line-clamp-2">{product.name}</h3>
+        <p className="text-smoke text-xs sm:text-sm mt-0.5 line-clamp-1">{product.tagline}</p>
+        <div className="flex items-center justify-between mt-1.5 sm:mt-2 gap-1">
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
             <StarRating rating={product.rating} size={10} />
             {v && (
-              <span className="text-gold font-medium">{formatPrice(v.price)}</span>
+              <span className="text-gold font-medium text-xs sm:text-base truncate">{formatPrice(v.price)}</span>
             )}
           </div>
           {v?.compare_at_price && (
-            <span className="text-smoke text-sm line-through">{formatPrice(v.compare_at_price)}</span>
+            <span className="text-smoke text-[10px] sm:text-sm line-through shrink-0">{formatPrice(v.compare_at_price)}</span>
           )}
         </div>
         {product.inspired_by && (
-          <p className="text-gold/80 text-xs mt-1">Inspired by {product.inspired_by}</p>
+          <p className="text-gold/80 text-[10px] sm:text-xs mt-1 line-clamp-1">Inspired by {product.inspired_by}</p>
         )}
       </div>
     </div>

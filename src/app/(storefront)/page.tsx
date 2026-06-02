@@ -89,10 +89,10 @@ export default async function HomePage() {
       <BrandPromiseBar />
 
       {/* Featured Collection */}
-      <section className="py-20 px-4">
+      <section className="py-12 sm:py-16 lg:py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-display text-4xl text-ivory mb-12">Signature Collection</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <h2 className="font-display text-3xl sm:text-4xl text-ivory mb-8 sm:mb-12">Signature Collection</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
             {(featured || []).map((p) => (
               <ProductCard
                 key={p.id}
@@ -120,10 +120,10 @@ export default async function HomePage() {
       />
 
       {/* Men's Preview */}
-      <section className="py-20 px-4 bg-noir-card/50">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 bg-noir-card/50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-display text-4xl text-ivory mb-12">Men&apos;s Collection</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          <h2 className="font-display text-3xl sm:text-4xl text-ivory mb-8 sm:mb-12">Men&apos;s Collection</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8">
             {(mens || []).map((p) => (
               <ProductCard
                 key={p.id}
@@ -151,10 +151,10 @@ export default async function HomePage() {
       />
 
       {/* Women's Preview */}
-      <section className="py-20 px-4">
+      <section className="py-12 sm:py-16 lg:py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-display text-4xl text-ivory mb-12">Women&apos;s Collection</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          <h2 className="font-display text-3xl sm:text-4xl text-ivory mb-8 sm:mb-12">Women&apos;s Collection</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8">
             {(womens || []).map((p) => (
               <ProductCard
                 key={p.id}

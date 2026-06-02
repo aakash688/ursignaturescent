@@ -26,9 +26,9 @@ export function NewsletterSection() {
   }
 
   return (
-    <section className="py-24 px-4 border-t border-white/5">
+    <section className="py-12 sm:py-24 px-4 border-t border-white/5">
       <div className="max-w-xl mx-auto text-center">
-        <h2 className="font-display text-3xl text-ivory mb-4">Be the first to know</h2>
+        <h2 className="font-display text-3xl sm:text-4xl text-ivory mb-4">Be the first to know</h2>
         <p className="text-smoke mb-8">Exclusive drops, offers, and fragrance guides.</p>
         {status === 'success' ? (
           <p className="text-gold">Thank you! You&apos;re on the list.</p>

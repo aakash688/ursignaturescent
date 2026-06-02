@@ -24,8 +24,8 @@ export function AnnouncementBar({ initialAnnouncement }: { initialAnnouncement?:
   if (dismissed) return null
 
   return (
-    <div className="bg-gold text-noir py-2 px-4 text-center text-sm font-medium relative">
-      <span>{text}</span>
+    <div className="bg-gold text-noir py-2 px-4 text-center text-xs sm:text-sm font-medium relative">
+      <span className="block pr-10 leading-snug line-clamp-2 sm:line-clamp-none">{text}</span>
       <button
         onClick={() => setDismissed(true)}
         className="absolute right-4 top-1/2 -translate-y-1/2 hover:opacity-70"
